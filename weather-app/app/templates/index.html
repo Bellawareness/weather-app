@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #aee1f9 0%, #f0f9ff 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            color: #222;
+        }
+        .cloud {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: floatClouds 30s linear infinite;
+        }
+        .cloud1 { width: 120px; height: 60px; top: 60px; left: 10%; animation-delay: 0s;}
+        .cloud2 { width: 200px; height: 100px; top: 120px; left: 60%; animation-delay: 10s;}
+        .cloud3 { width: 90px; height: 45px; top: 200px; left: 30%; animation-delay: 20s;}
+        @keyframes floatClouds {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100vw); }
+        }
+        .weather-card {
+            background: rgba(255,255,255,0.98);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.22);
+            padding: 2.2rem 2rem 2rem 2rem;
+            margin-top: 2.5rem;
+            max-width: 420px;
+            width: 100%;
+            animation: fadeIn 1.2s;
+        }
+        .weather-card h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+        }
+        .weather-card h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+        .form-control-lg {
+            font-size: 1.15rem;
+            border-radius: 12px;
+            padding: 0.7rem 1rem;
+        }
+        .btn-cloudy {
+            background: linear-gradient(90deg, #6dd5ed 0%, #2193b0 100%);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 0.7rem 1.7rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            box-shadow: 0 4px 14px rgba(33,147,176,0.15);
+            margin-top: 0.5rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .btn-cloudy:hover {
+            box-shadow: 0 8px 24px rgba(33,147,176,0.25);
+            transform: translateY(-2px) scale(1.04);
+        }
+        .list-group-item {
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: transparent;
+            border: none;
+            padding-left: 0;
+            padding-right: 0;
+            margin-bottom: 0.3rem;
+        }
+        .list-group-item b {
+            font-size: 1.18rem;
+            color: #2193b0;
+            margin-left: 0.3rem;
+        }
+        .cloud-emoji {
+            font-size: 2.3rem;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        .fade-in {
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        @media (max-width: 600px) {
+            .weather-card {
+                padding: 1.1rem 0.5rem;
+                margin-top: 1rem;
+                max-width: 98vw;
+            }
+            .weather-card h1 {
+                font-size: 1.4rem;
+            }
+            .weather-card h2 {
+                font-size: 1.05rem;
+            }
+            .list-group-item {
+                font-size: 1rem;
+            }
+        }
+        .alert {
+            font-size: 1rem;
+            margin-top: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+        <div class="weather-card fade-in">
+            <h1 class="text-center mb-4"><span class="cloud-emoji">☁️</span>Weather App</h1>
+            <form method="POST" action="/">
+                <div class="form-group">
+                    <label for="city">Enter City:</label>
+                    <input type="text" class="form-control form-control-lg" id="city" name="city" placeholder="e.g. Atlanta" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-cloudy mt-3">Get Weather</button>
+                </div>
+            </form>
+
+            {% if error_message %}
+              <div class="alert alert-danger mt-3 fade-in" role="alert">
+                {{ error_message }}
+              </div>
+            {% endif %}
+
+            {% if city_matches %}
+              <div class="mt-4 fade-in">
+                <h5>Did you mean:</h5>
+                <form method="POST" action="/">
+                  {% for match in city_matches %}
+                    <button type="submit" name="choose_city" value="1" class="btn btn-outline-primary btn-block mb-2">
+                      {{ match.display_name }}
+                    </button>
+                    <input type="hidden" name="lat" value="{{ match.lat }}">
+                    <input type="hidden" name="lon" value="{{ match.lon }}">
+                    <input type="hidden" name="display_name" value="{{ match.display_name }}">
+                  {% endfor %}
+                </form>
+              </div>
+            {% endif %}
+
+            {% if weather_data %}
+              <div class="fade-in">
+                <h2 class="mt-4 text-center" style="font-size:1.2rem; font-weight:500;">
+                  Current Weather in <span style="font-size:1rem; font-weight:400;">{{ weather_data.city }}</span>
+                </h2>
+                <ul class="list-group list-group-flush mt-3">
+                  <li class="list-group-item">🌡️ Temperature: <b>{{ weather_data.temperature }}°F</b></li>
+                  <li class="list-group-item">💨 Wind Speed: <b>{{ weather_data.windspeed }} km/h</b></li>
+                  <li class="list-group-item">💧 Humidity: <b>{{ weather_data.humidity }}%</b></li>
+                  <li class="list-group-item">
+                    🌦️ Weather: <b>{{ weather_data.weatherdesc }}</b>
+                    <span style="color: #888; font-size: 0.95em;">(Code: {{ weather_data.weathercode }})</span>
+                  </li>
+                </ul>
+              </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+</body>
+</html>
