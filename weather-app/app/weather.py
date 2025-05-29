@@ -55,20 +55,20 @@ def get_weather_by_coords(lat, lon, display_name):
         f"&current_weather=true"
         f"&temperature_unit=fahrenheit"
         f"&hourly=relative_humidity_2m"
+        f"&daily=sunrise,sunset"
         f"&timezone=auto"
     )
     try:
         weather_resp = requests.get(weather_url)
-        logging.info(f"Weather API request: {weather_url}")
-        if weather_resp.status_code != 200:
-            logging.error(f"Weather API error: {weather_resp.status_code} {weather_resp.text}")
-            return None
-
         data = weather_resp.json()
-        print("Open-Meteo API response:", data)  # Debugging line
-
         current = data.get('current_weather')
         humidity = None
+
+        # Get sunrise and sunset for today
+        sunrise = sunset = None
+        if 'daily' in data and 'sunrise' in data['daily'] and 'sunset' in data['daily']:
+            sunrise = data['daily']['sunrise'][0]
+            sunset = data['daily']['sunset'][0]
 
         # Match humidity to the current weather time
         if current and 'hourly' in data and 'relative_humidity_2m' in data['hourly']:
@@ -81,16 +81,19 @@ def get_weather_by_coords(lat, lon, display_name):
                 except (ValueError, KeyError):
                     humidity = humidities[0]  # fallback
 
+        weathercode = current.get('weathercode') if current else None
+        weatherdesc = WEATHER_CODE_DESCRIPTIONS.get(weathercode, "Unknown")
+
         if current:
-            weathercode = current.get('weathercode')
-            weatherdesc = WEATHER_CODE_DESCRIPTIONS.get(weathercode, "Unknown")
             return {
                 'city': display_name,
                 'temperature': current.get('temperature'),
                 'windspeed': current.get('windspeed'),
                 'weathercode': weathercode,
                 'weatherdesc': weatherdesc,
-                'humidity': humidity
+                'humidity': humidity,
+                'sunrise': sunrise,
+                'sunset': sunset
             }
         return None
     except Exception as e:

@@ -5,36 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(to bottom, #aee1f9 0%, #f0f9ff 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', 'Arial', sans-serif;
             color: #222;
         }
-        .cloud {
-            position: absolute;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: floatClouds 30s linear infinite;
-        }
-        .cloud1 { width: 120px; height: 60px; top: 60px; left: 10%; animation-delay: 0s;}
-        .cloud2 { width: 200px; height: 100px; top: 120px; left: 60%; animation-delay: 10s;}
-        .cloud3 { width: 90px; height: 45px; top: 200px; left: 30%; animation-delay: 20s;}
-        @keyframes floatClouds {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(100vw); }
-        }
         .weather-card {
-            background: rgba(255,255,255,0.98);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: rgba(255,255,255,0.18);
             border-radius: 24px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.22);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255,255,255,0.35);
             padding: 2.2rem 2rem 2rem 2rem;
             margin-top: 2.5rem;
             max-width: 420px;
             width: 100%;
             animation: fadeIn 1.2s;
+            position: relative;
+            overflow: hidden;
         }
         .weather-card h1 {
             font-size: 2.2rem;
@@ -52,10 +45,11 @@
             font-weight: 500;
             margin-bottom: 0.3rem;
         }
-        .form-control-lg {
+        .form-control-lg, .btn, .btn-block {
             font-size: 1.15rem;
             border-radius: 12px;
             padding: 0.7rem 1rem;
+            min-height: 48px;
         }
         .btn-cloudy {
             background: linear-gradient(90deg, #6dd5ed 0%, #2193b0 100%);
@@ -73,8 +67,17 @@
             box-shadow: 0 8px 24px rgba(33,147,176,0.25);
             transform: translateY(-2px) scale(1.04);
         }
+        .btn, .btn-block {
+            margin-bottom: 0.7rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
         .list-group-item {
             font-size: 1.15rem;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
             display: flex;
             align-items: center;
             gap: 0.7rem;
@@ -82,17 +85,11 @@
             border: none;
             padding-left: 0;
             padding-right: 0;
-            margin-bottom: 0.3rem;
         }
         .list-group-item b {
             font-size: 1.18rem;
             color: #2193b0;
             margin-left: 0.3rem;
-        }
-        .cloud-emoji {
-            font-size: 2.3rem;
-            margin-right: 0.5rem;
-            vertical-align: middle;
         }
         .fade-in {
             animation: fadeIn 1s;
@@ -108,35 +105,43 @@
                 max-width: 98vw;
             }
             .weather-card h1 {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
             }
             .weather-card h2 {
-                font-size: 1.05rem;
+                font-size: 1rem;
             }
             .list-group-item {
+                font-size: 0.98rem;
+                padding: 0.6rem 0.3rem;
+            }
+            .btn, .btn-block {
                 font-size: 1rem;
+                min-height: 44px;
+            }
+            label, .alert {
+                font-size: 0.98rem;
             }
         }
         .alert {
-            font-size: 1rem;
+            font-size: 1.05rem;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
             margin-top: 1.2rem;
         }
     </style>
 </head>
 <body>
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-    <div class="cloud cloud3"></div>
     <div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
         <div class="weather-card fade-in">
-            <h1 class="text-center mb-4"><span class="cloud-emoji">☁️</span>Weather App</h1>
+            <h1 class="text-center mb-4">
+                <span class="weather-emoji"></span> Bella's Weather App
+            </h1>
             <form method="POST" action="/">
-                <div class="form-group">
-                    <label for="city">Enter City:</label>
+                <div class="form-group mb-3">
+                    <label for="city" class="mb-2">Enter City:</label>
                     <input type="text" class="form-control form-control-lg" id="city" name="city" placeholder="e.g. Atlanta" required>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-cloudy mt-3">Get Weather</button>
+                    <button type="submit" class="btn btn-cloudy mt-2">Get Weather</button>
                 </div>
             </form>
 
@@ -163,20 +168,40 @@
             {% endif %}
 
             {% if weather_data %}
-              <div class="fade-in">
-                <h2 class="mt-4 text-center" style="font-size:1.2rem; font-weight:500;">
-                  Current Weather in <span style="font-size:1rem; font-weight:400;">{{ weather_data.city }}</span>
-                </h2>
-                <ul class="list-group list-group-flush mt-3">
-                  <li class="list-group-item">🌡️ Temperature: <b>{{ weather_data.temperature }}°F</b></li>
-                  <li class="list-group-item">💨 Wind Speed: <b>{{ weather_data.windspeed }} km/h</b></li>
-                  <li class="list-group-item">💧 Humidity: <b>{{ weather_data.humidity }}%</b></li>
-                  <li class="list-group-item">
-                    🌦️ Weather: <b>{{ weather_data.weatherdesc }}</b>
-                    <span style="color: #888; font-size: 0.95em;">(Code: {{ weather_data.weathercode }})</span>
-                  </li>
-                </ul>
+              <div class="weather-effect text-center mb-3">
+                {% if weather_data.weathercode in [0, 1] %}
+                  <!-- Sunshine -->
+                  <i class="fa-solid fa-sun fa-2x" style="color: #FFD600;"></i>
+                {% elif weather_data.weathercode in [2, 3, 45, 48] %}
+                  <!-- Clouds -->
+                  <i class="fa-solid fa-cloud fa-2x" style="color: #90a4ae;"></i>
+                {% elif weather_data.weathercode in [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82] %}
+                  <!-- Rain/Drizzle -->
+                  <i class="fa-solid fa-cloud-showers-heavy fa-2x" style="color: #2196f3;"></i>
+                {% elif weather_data.weathercode in [71, 73, 75, 77, 85, 86] %}
+                  <!-- Snow -->
+                  <i class="fa-solid fa-snowflake fa-2x" style="color: #00bcd4;"></i>
+                {% elif weather_data.weathercode in [95, 96, 99] %}
+                  <!-- Thunderstorm -->
+                  <i class="fa-solid fa-cloud-bolt fa-2x" style="color: #ffb300;"></i>
+                {% else %}
+                  <i class="fa-solid fa-cloud-sun fa-2x" style="color: #90caf9;"></i>
+                {% endif %}
               </div>
+              <h2 class="mt-4 text-center" style="font-size:1.2rem; font-weight:600;">
+                Current Weather in <span style="font-size:1rem; font-weight:400;">{{ weather_data.city }}</span>
+              </h2>
+              <ul class="list-group list-group-flush mt-3">
+                <li class="list-group-item"> <b>Temperature:</b> {{ weather_data.temperature }}°F</li>
+                <li class="list-group-item"> <b>Wind Speed:</b> {{ weather_data.windspeed }} km/h</li>
+                <li class="list-group-item"> <b>Humidity:</b> {{ weather_data.humidity }}%</li>
+                <li class="list-group-item"> <b>Condition:</b> {{ weather_data.weatherdesc }}</li>
+                <li class="list-group-item">
+                  <b>Sunrise:</b> {{ weather_data.sunrise[11:16] if weather_data.sunrise else 'N/A' }}
+                  &nbsp;|&nbsp;
+                  <b>Sunset:</b> {{ weather_data.sunset[11:16] if weather_data.sunset else 'N/A' }}
+                </li>
+              </ul>
             {% endif %}
         </div>
     </div>

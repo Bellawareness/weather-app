@@ -91,3 +91,32 @@ INFO:werkzeug:127.0.0.1 - - [21/May/2025 12:58:07] "POST / HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [21/May/2025 12:58:12] "POST / HTTP/1.1" 200 -
 INFO:root:Weather API request: https://api.open-meteo.com/v1/forecast?latitude=33.7544657&longitude=-84.3898151&current_weather=true&temperature_unit=fahrenheit&hourly=relative_humidity_2m&timezone=auto
 INFO:werkzeug:127.0.0.1 - - [21/May/2025 12:58:15] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 16:30:43] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 16:30:50] "POST / HTTP/1.1" 200 -
+INFO:root:Weather API request: https://api.open-meteo.com/v1/forecast?latitude=33.9528472&longitude=-84.5496148&current_weather=true&temperature_unit=fahrenheit&hourly=relative_humidity_2m&timezone=auto
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 16:30:53] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 16:34:19] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 16:34:25] "POST / HTTP/1.1" 200 -
+INFO:root:Weather API request: https://api.open-meteo.com/v1/forecast?latitude=33.7544657&longitude=-84.3898151&current_weather=true&temperature_unit=fahrenheit&hourly=relative_humidity_2m&timezone=auto
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 16:34:29] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:26:59] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:27:11] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:27:12] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:27:13] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:27:14] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:27:15] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:27:16] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:27:21] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [26/May/2025 17:32:40] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [29/May/2025 14:27:29] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [29/May/2025 14:27:35] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [29/May/2025 14:27:39] "POST / HTTP/1.1" 200 -
